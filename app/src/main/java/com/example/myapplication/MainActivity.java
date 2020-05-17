@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     public Button m_btnNetworkInfo = null;
     public TextView m_txtNetworkInfo = null;
 
-    // 05.18. 01:44 기준
+    // 05.18. 01:45 기준
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
