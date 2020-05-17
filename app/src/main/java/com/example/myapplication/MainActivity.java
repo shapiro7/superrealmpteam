@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     public Button m_btnNetworkInfo = null;
     public TextView m_txtNetworkInfo = null;
 
+    // 05.17. 23:32 기준
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         m_btnNetworkInfo = (Button)findViewById(R.id.NetworkInfo);
         m_txtNetworkInfo = (TextView)findViewById(R.id.NetworkInfo2);
 
+        // 클릭 리스너 사용
         m_btnNetworkInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
