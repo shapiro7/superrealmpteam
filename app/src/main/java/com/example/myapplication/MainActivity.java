@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -13,9 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    final String TAG = "AndroidDEV_UI";
-    public Button m_btnNetworkInfo = null;
-    public TextView m_txtNetworkInfo = null;
 
     // 05.18. 01:45 기준
     @Override
@@ -24,39 +22,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        m_btnNetworkInfo = (Button)findViewById(R.id.NetworkInfo);
-        m_txtNetworkInfo = (TextView)findViewById(R.id.NetworkInfo2);
-
-        // 클릭 리스너 사용
-        m_btnNetworkInfo.setOnClickListener(new View.OnClickListener() {
+        // '네트워크 정보'버튼 터치 시 네트워크 메뉴로 이동
+        Button NetworkAdd = (Button) findViewById(R.id.network);
+        NetworkAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                Intent StartNetworkMenu = new Intent(MainActivity.this, WifiActivity.class);
+                startActivity(StartNetworkMenu);
+            }
+        });
 
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                String m_strName = "";
-                String m_strNetType;
+        // '블루투스 정보'버튼 터치 시 블루투스 메뉴로 이동
+        Button BluetoothAdd = (Button) findViewById(R.id.bluetoothAdd);
+        BluetoothAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent StartBluetoothMenu = new Intent(MainActivity.this, BluetoothActivity.class);
+                startActivity(StartBluetoothMenu);
+            }
+        });
 
-                int m_iNetworkType = activeNetwork.getType();
-                if ( m_iNetworkType == cm.TYPE_WIFI )
-                {
-                    //Wi_Fi 사용 시 AP의 SSID를 가져온다.
-                    m_strName = wifiManager.getConnectionInfo().getSSID();
-                    m_strNetType = "Wi-Fi";
-                }
-                else if ( m_iNetworkType == cm.TYPE_MOBILE )
-                {
-                    //모바일 네트워크 사용 시 네트워크 정보를 가져온다.
-                    m_strName = activeNetwork.getExtraInfo();
-                    m_strNetType = "Mobile";
-                }
-                else
-                {
-                    m_strNetType = "None";
-                }
-
-                m_txtNetworkInfo.setText("Name : "+m_strName+" \n NetworkType : "+m_strNetType);
+        // '메모 추가'버튼 터치 시 메모 추가 메뉴로 이동
+        Button MemoAdd = (Button) findViewById(R.id.MemoAdd);
+        MemoAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent StartMemoMenu = new Intent(MainActivity.this, MemoActivity.class);
+                startActivity(StartMemoMenu);
             }
         });
     }
