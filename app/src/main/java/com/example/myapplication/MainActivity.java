@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,96 +37,42 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+public class MainActivity extends AppCompatActivity {
 
+    // 05.18. 01:45 기준
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listview = (ListView) findViewById(R.id.listview1) ;
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, items) ;
-
-        listview.setAdapter(adapter) ;
-
-        loadItemsFromFile() ;
-        adapter.notifyDataSetChanged();
-
-        Button buttonAdd = (Button) findViewById(R.id.buttonAdd) ;
-        buttonAdd.setEnabled(false) ; // 초기 버튼 상태 비활성 상태로 지정.
-        buttonAdd.setOnClickListener(new Button.OnClickListener() {
+        // '네트워크 정보'버튼 터치 시 네트워크 메뉴로 이동
+        Button NetworkAdd = (Button) findViewById(R.id.network);
+        NetworkAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText editTextNew = (EditText) findViewById(R.id.editTextNew) ;
-                String strNew = (String) editTextNew.getText().toString() ;
-
-                if (strNew.length() > 0) {
-                    // 리스트에 문자열 추가.
-                    items.add(strNew);
-
-                    // 에디트텍스트 내용 초기화.
-                    editTextNew.setText("") ;
-
-                    // 리스트뷰 갱신
-                    adapter.notifyDataSetChanged();
-
-                    // 리스트뷰 아이템들을 파일에 저장.
-                    saveItemsToFile() ;
-                }
+                Intent StartNetworkMenu = new Intent(MainActivity.this, WifiActivity.class);
+                startActivity(StartNetworkMenu);
             }
         });
 
-
-        Button buttonDel = (Button) findViewById(R.id.buttonDel) ;
-        buttonDel.setOnClickListener(new Button.OnClickListener() {
+        // '블루투스 정보'버튼 터치 시 블루투스 메뉴로 이동
+        Button BluetoothAdd = (Button) findViewById(R.id.bluetoothAdd);
+        BluetoothAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int count ;
-                int checkedIndex ;
-
-                count = adapter.getCount() ;
-
-                if (count > 0) {
-                    // 리스트뷰에서 선택된 아이템 인덱스 얻어오기.
-                    checkedIndex = listview.getCheckedItemPosition();
-                    if (checkedIndex > -1 && checkedIndex < count) {
-                        // 아이템 삭제
-                        items.remove(checkedIndex) ;
-
-                        // 리스트뷰 선택 초기화.
-                        listview.clearChoices();
-
-                        // 리스트뷰 갱신
-                        adapter.notifyDataSetChanged();
-
-                        // 리스트뷰 아이템들을 파일에 저장.
-                        saveItemsToFile() ;
-                    }
-                }
+                Intent StartBluetoothMenu = new Intent(MainActivity.this, BluetoothActivity.class);
+                startActivity(StartBluetoothMenu);
             }
         });
 
-
-        EditText editTextNew = (EditText) findViewById(R.id.editTextNew) ;
-        editTextNew.addTextChangedListener(new TextWatcher() {
+        // '메모 추가'버튼 터치 시 메모 추가 메뉴로 이동
+        Button MemoAdd = (Button) findViewById(R.id.MemoAdd);
+        MemoAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void afterTextChanged(Editable edit) {
-                Button buttonAdd = (Button) findViewById(R.id.buttonAdd) ;
-                if (edit.toString().length() > 0) {
-                    // 버튼 상태 활성화.
-                    buttonAdd.setEnabled(true) ;
-                } else {
-                    // 버튼 상태 비활성화.
-                    buttonAdd.setEnabled(false) ;
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onClick(View v) {
+                Intent StartMemoMenu = new Intent(MainActivity.this, MemoActivity.class);
+                startActivity(StartMemoMenu);
             }
         }) ;
 
@@ -196,6 +145,3 @@ public class MainActivity extends AppCompatActivity{
 
 
 }
-
-
-
