@@ -12,6 +12,14 @@
         android:id="@+id/network"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginRight="44dp"
+        android:layout_toStartOf="@+id/bluetoothAdd"
+        android:layout_toLeftOf="@+id/bluetoothAdd"
         android:text="네트워크 정보"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +32,10 @@
         android:id="@+id/bluetoothAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClickedBluetooth"
+        android:layout_marginEnd="55dp"
+        android:layout_marginRight="55dp"
+        android:layout_toStartOf="@+id/MemoAdd"
+        android:layout_toLeftOf="@+id/MemoAdd"
         android:text="블루투스 정보"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +48,10 @@
         android:id="@+id/MemoAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClicked"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:text="메모 추가"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,4 +61,4 @@
         app:layout_constraintVertical_bias="0.318" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
