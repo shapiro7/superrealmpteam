@@ -3,68 +3,199 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
-    final String TAG = "AndroidDEV_UI";
-    public Button m_btnNetworkInfo = null;
-    public TextView m_txtNetworkInfo = null;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
 
-    // 05.18. 01:04 기준
+public class MainActivity extends AppCompatActivity{
+
+    private final String fileName = "items.list" ;
+    private ListView listview ;
+    private ArrayAdapter adapter ;
+    private ArrayList<String> items = new ArrayList<String>() ;
+
+
+
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        m_btnNetworkInfo = (Button)findViewById(R.id.NetworkInfo);
-        m_txtNetworkInfo = (TextView)findViewById(R.id.NetworkInfo2);
+        listview = (ListView) findViewById(R.id.listview1) ;
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, items) ;
 
-        // 클릭 리스너 사용
-        m_btnNetworkInfo.setOnClickListener(new View.OnClickListener() {
+        listview.setAdapter(adapter) ;
+
+        loadItemsFromFile() ;
+        adapter.notifyDataSetChanged();
+
+        Button buttonAdd = (Button) findViewById(R.id.buttonAdd) ;
+        buttonAdd.setEnabled(false) ; // 초기 버튼 상태 비활성 상태로 지정.
+        buttonAdd.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                EditText editTextNew = (EditText) findViewById(R.id.editTextNew) ;
+                String strNew = (String) editTextNew.getText().toString() ;
 
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                String m_strName = "";
-                String m_strNetType;
+                if (strNew.length() > 0) {
+                    // 리스트에 문자열 추가.
+                    items.add(strNew);
 
-                int m_iNetworkType = activeNetwork.getType();
-                if ( m_iNetworkType == cm.TYPE_WIFI )
-                {
-                    //Wi_Fi 사용 시 AP의 SSID를 가져온다.
-                    m_strName = wifiManager.getConnectionInfo().getSSID();
-                    m_strNetType = "Wi-Fi";
-                }
-                else if ( m_iNetworkType == cm.TYPE_MOBILE )
-                {
-                    //모바일 네트워크 사용 시 네트워크 정보를 가져온다.
-                    m_strName = activeNetwork.getExtraInfo();
-                    m_strNetType = "Mobile";
-                }
-                else
-                {
-                    m_strNetType = "None";
-                }
+                    // 에디트텍스트 내용 초기화.
+                    editTextNew.setText("") ;
 
-                m_txtNetworkInfo.setText("Name : "+m_strName+" \n NetworkType : "+m_strNetType);
+                    // 리스트뷰 갱신
+                    adapter.notifyDataSetChanged();
+
+                    // 리스트뷰 아이템들을 파일에 저장.
+                    saveItemsToFile() ;
+                }
             }
         });
+
+
+        Button buttonDel = (Button) findViewById(R.id.buttonDel) ;
+        buttonDel.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int count ;
+                int checkedIndex ;
+
+                count = adapter.getCount() ;
+
+                if (count > 0) {
+                    // 리스트뷰에서 선택된 아이템 인덱스 얻어오기.
+                    checkedIndex = listview.getCheckedItemPosition();
+                    if (checkedIndex > -1 && checkedIndex < count) {
+                        // 아이템 삭제
+                        items.remove(checkedIndex) ;
+
+                        // 리스트뷰 선택 초기화.
+                        listview.clearChoices();
+
+                        // 리스트뷰 갱신
+                        adapter.notifyDataSetChanged();
+
+                        // 리스트뷰 아이템들을 파일에 저장.
+                        saveItemsToFile() ;
+                    }
+                }
+            }
+        });
+
+
+        EditText editTextNew = (EditText) findViewById(R.id.editTextNew) ;
+        editTextNew.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable edit) {
+                Button buttonAdd = (Button) findViewById(R.id.buttonAdd) ;
+                if (edit.toString().length() > 0) {
+                    // 버튼 상태 활성화.
+                    buttonAdd.setEnabled(true) ;
+                } else {
+                    // 버튼 상태 비활성화.
+                    buttonAdd.setEnabled(false) ;
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        }) ;
+
+
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_dev, menu);
-        return true;
+
+
+    private void saveItemsToFile() {
+        File file = new File(getFilesDir(), fileName) ;
+        FileWriter fw = null ;
+        BufferedWriter bufwr = null ;
+
+        try {
+            // open file.
+            fw = new FileWriter(file) ;
+            bufwr = new BufferedWriter(fw) ;
+
+            for (String str : items) {
+                bufwr.write(str) ;
+                bufwr.newLine() ;
+            }
+
+            // write data to the file.
+            bufwr.flush() ;
+
+        } catch (Exception e) {
+            e.printStackTrace() ;
+        }
+
+        try {
+            // close file.
+            if (bufwr != null) {
+                bufwr.close();
+            }
+
+            if (fw != null) {
+                fw.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace() ;
+        }
     }
+
+
+    private void loadItemsFromFile() {
+        File file = new File(getFilesDir(), fileName) ;
+        FileReader fr = null ;
+        BufferedReader bufrd = null ;
+        String str ;
+
+        if (file.exists()) {
+            try {
+                // open file.
+                fr = new FileReader(file) ;
+                bufrd = new BufferedReader(fr) ;
+
+                while ((str = bufrd.readLine()) != null) {
+                    items.add(str) ;
+                }
+
+                bufrd.close() ;
+                fr.close() ;
+            } catch (Exception e) {
+                e.printStackTrace() ;
+            }
+        }
+    }
+
+
 }
+
+
 
