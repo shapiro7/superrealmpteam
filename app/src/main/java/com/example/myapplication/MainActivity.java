@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // '네트워크 정보'버튼 터치 시 네트워크 메뉴로 이동
+        // '네트워크 정보'버튼 터치 시 네트워크 메뉴로 이동ㅇ
         Button NetworkAdd = (Button) findViewById(R.id.network);
         NetworkAdd.setOnClickListener(new View.OnClickListener() {
             @Override
