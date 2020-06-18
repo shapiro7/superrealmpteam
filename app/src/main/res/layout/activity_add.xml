@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddActivity">
+
+    <EditText
+        android:id="@+id/edtMemo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="메모를 입력하세요"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.934" />
+
+    <EditText
+        android:id="@+id/edtWhere"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="장소를 입력하세요"
+        app:layout_constraintBottom_toTopOf="@+id/edtMemo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.928" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="308dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="185dp"
+            android:layout_height="54dp"
+            android:layout_above="@+id/edtMemo"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/add_alert_button_pressed" />
+
+        <Button
+            android:id="@+id/btnNo"
+            android:layout_width="111dp"
+            android:layout_height="55dp"
+            android:layout_above="@+id/edtMemo"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/delete_alert_button_pressed" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/edtWhere"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.917">
+
+
+        <Button
+            android:id="@+id/btnBluetooth"
+            android:layout_width="165dp"
+            android:layout_height="55dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/bluetooth_button_pressed" />
+
+        <Button
+            android:id="@+id/btnConnect"
+            android:layout_width="165dp"
+            android:layout_height="55dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/wifi_button_pressed" />
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
